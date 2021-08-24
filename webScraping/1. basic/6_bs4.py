@@ -39,4 +39,3 @@ rank2 = rank3.previous_sibling.previous_sibling
 printLn(rank2)
 rank2 = rank1.find_next_sibling("li")
 printLn(rank2)
-
