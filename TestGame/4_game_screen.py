@@ -8,13 +8,17 @@ def setup(level):
     number_count = min(number_count, 20)
 
     # 실제 화면에 grid 형태로 숫자를 랜덤으로 배치
-
     shuffle_grid(number_count)
 
 # 숫자 섞기
 def shuffle_grid(number_count):
     rows = 5
     columns = 9
+
+    cell_size = 130 # 각 grid cell 별 가로, 세로 크기
+    button_size = 110 # grid cell 내에 실제로 그려질 버튼 그기
+    screen_left_margin = 55 # 전체 스크린 왼쪽 여백
+    screen_top_margin = 20 # 전체 스크린 위쪽 여백
 
     grid = [[ 0 for col in range(columns)] for row in range(rows)]
 
@@ -26,6 +30,15 @@ def shuffle_grid(number_count):
         if grid[row_idx][col_idx] == 0:
             grid[row_idx][col_idx] = number
             number += 1
+
+            # 현재 grid cell 위치 기준으로 x, y 위치를 구함
+            center_x = screen_left_margin + (col_idx * cell_size) - (cell_size / 2)
+            center_y = screen_top_margin + (row_idx * cell_size) - (cell_size / 2)
+
+            # 숫자 버튼 만들기
+            button = pygame.Rect(0, 0, button_size, button_size)            
+            button.center(center_x, center_y)
+            number_buttons.append(button)
     
     print(grid)
 
@@ -44,6 +57,9 @@ start_button.center = (120, screen_height - 120)
 # 색깔 # RGB
 BLACK = (0, 0, 0) 
 WHITE = (255, 255, 255)
+GRAY = (50, 50, 50)
+# 사용자가 눌러야 할 버튼 
+number_buttons = [] 
 
 # 게임 시작 여부
 start = False
@@ -55,7 +71,8 @@ def displayStartScreen():
 
 # 게임 화면 보여주기
 def displayGameScreen():
-    print("Game Start")
+    for idx, rect in enumerate(number_buttons, start = 1):
+        pygame.draw.rect(screen, GRAY, rect)
 
 # pos 에 해당하는 버튼 확인
 def checkButtons(pos):
