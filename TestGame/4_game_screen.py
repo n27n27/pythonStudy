@@ -1,4 +1,34 @@
 import pygame
+from random import *
+# 레벨에 맞게 설정
+def setup(level):
+    # 얼마나 많은 숫자를 보여줄 것인가?
+    number_count = (level // 3) + 5
+    # 20 초과하면 20으로 초기화
+    number_count = min(number_count, 20)
+
+    # 실제 화면에 grid 형태로 숫자를 랜덤으로 배치
+
+    shuffle_grid(number_count)
+
+# 숫자 섞기
+def shuffle_grid(number_count):
+    rows = 5
+    columns = 9
+
+    grid = [[ 0 for col in range(columns)] for row in range(rows)]
+
+    # 시작 숫자 부터 number_count 까지
+    number = 1
+    while number <= number_count:
+        row_idx = randrange(0, rows)
+        col_idx = randrange(0, columns)
+        if grid[row_idx][col_idx] == 0:
+            grid[row_idx][col_idx] = number
+            number += 1
+    
+    print(grid)
+
 
 # 초기화
 pygame.init()
@@ -33,6 +63,9 @@ def checkButtons(pos):
     # rect 안에 포인트가 포함되는지 확인
     if start_button.collidepoint(pos):
         start = True
+
+# 게임 시작 전에 게임 설정 함수 실행
+setup(5)
 
 # 게임 루프
 running = True 
