@@ -27,17 +27,18 @@ def shuffle_grid(number_count):
     while number <= number_count:
         row_idx = randrange(0, rows)
         col_idx = randrange(0, columns)
+
         if grid[row_idx][col_idx] == 0:
             grid[row_idx][col_idx] = number
             number += 1
 
             # 현재 grid cell 위치 기준으로 x, y 위치를 구함
-            center_x = screen_left_margin + (col_idx * cell_size) - (cell_size / 2)
-            center_y = screen_top_margin + (row_idx * cell_size) - (cell_size / 2)
+            center_x = screen_left_margin + (col_idx * cell_size) + (cell_size / 2)
+            center_y = screen_top_margin + (row_idx * cell_size) + (cell_size / 2)
 
             # 숫자 버튼 만들기
-            button = pygame.Rect(0, 0, button_size, button_size)            
-            button.center(center_x, center_y)
+            button = pygame.Rect(0, 0, button_size, button_size)        
+            button.center = (center_x, center_y)
             number_buttons.append(button)
     
     print(grid)
@@ -49,6 +50,7 @@ screen_width = 1280 # 가로크기
 screen_height = 720 # 세로크기
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Memory Game")
+game_font = pygame.font.Font(None, 120)
 
 # 시작 버튼
 start_button = pygame.Rect(0, 0, 120, 120)
@@ -74,6 +76,11 @@ def displayGameScreen():
     for idx, rect in enumerate(number_buttons, start = 1):
         pygame.draw.rect(screen, GRAY, rect)
 
+        # 실제 숫자 텍스트
+        cell_text = game_font.render(str(idx), True, WHITE)
+        text_rect = cell_text.get_rect(center = rect.center)
+        screen.blit(cell_text, text_rect)        
+
 # pos 에 해당하는 버튼 확인
 def checkButtons(pos):
     global start
@@ -82,7 +89,7 @@ def checkButtons(pos):
         start = True
 
 # 게임 시작 전에 게임 설정 함수 실행
-setup(5)
+setup(1)
 
 # 게임 루프
 running = True 
