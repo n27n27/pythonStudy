@@ -1,5 +1,9 @@
 from selenium import webdriver
+from bs4 import BeautifulSoup
+import requests
 import time
+
+
 
 browser = webdriver.Chrome("C:/Users/n27/Desktop/개발공부/pythonStudy/chromedriver.exe")
 browser.maximize_window()
@@ -35,3 +39,36 @@ while True:
 
 
 print("스크롤 완료")
+
+soup = BeautifulSoup(browser.page_source, "lxml")
+
+# movies = soup.find_all("div", attrs = {"class":["ImZGtf mpg5gc", "Vpfmgd"]})
+movies = soup.find_all("div", attrs = {"class":"Vpfmgd"})
+print(len(movies))
+
+for movie in movies:
+    title = movie.find("div", attrs = {"class":"WsMG1c nnK0zc"}).get_text()
+    
+    # 할인 전 가격
+    original_price = movie.find("span", attrs={"class":"SUZt4c djCuy"})
+
+    if original_price:
+        original_price = original_price.get_text()
+    else:
+        # print(title, "<할인되지 않은 영화 제외>")
+        continue
+
+    # 할인 된 가격
+    price = movie.find("span", attrs={"class":"VfPpfd ZdBevf i5DZme"}).get_text()
+
+    # 링크
+    link = movie.find("a", attrs={"class":"JC71ub"})["href"]
+    #  https://play.google.com/store + link 
+
+    print(f"제목 : {title}")
+    print(f"할인 전 금액 : {original_price}")
+    print(f"할인 후 금액 : {price}")
+    print("링크 : ", "https://play.google.com" + link)
+    print("-" * 120)
+
+browser.quit()
