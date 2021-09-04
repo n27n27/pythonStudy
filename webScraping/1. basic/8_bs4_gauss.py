@@ -32,4 +32,5 @@ for cartoon in cartoons:
     printLn(rate)
     total_rates += float(rate)
 print("전체 점수: ", total_rates)
+print("전체 점수: %.1f"%total_rates)
 print("평균 점수: ", total_rates / len(cartoons))
